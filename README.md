@@ -140,8 +140,8 @@ Report security problems according to [SECURITY.md](SECURITY.md).
 
 ## Related repositories
 
-- [Glade MCP](https://github.com/asterism-software/glade-mcp)
-- [Glade agent skills](https://github.com/asterism-software/glade-agent-skills)
+- [Glade MCP](https://github.com/ricciflow-api/glade-mcp)
+- [Glade agent skills](https://github.com/ricciflow-api/glade-agent-skills)
 
 ## License
 

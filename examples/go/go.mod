@@ -1,3 +1,3 @@
-module github.com/asterism-software/glade-api-examples/examples/go
+module github.com/ricciflow-api/glade-api-examples/examples/go
 
 go 1.23
