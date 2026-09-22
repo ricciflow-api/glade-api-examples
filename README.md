@@ -3,7 +3,8 @@
 Runnable examples for [Glade API](https://gladeapi.com), a normalized Amazon
 data API available through REST, GraphQL, and MCP. The examples use the public
 contract at <https://gladeapi.com/api/v1/openapi.json> and cover product lookup,
-marketplace search, and field-selective GraphQL queries.
+marketplace search, field-selective GraphQL queries, and transparent sales
+run-rate projections.
 
 This repository contains client examples, not the Glade API service source.
 For the complete reference, use the [official documentation](https://docs.gladeapi.com).
@@ -35,9 +36,9 @@ Every REST response uses an envelope. Product data is under
 
 | Runtime | Examples | Dependencies |
 |---|---|---|
-| curl | Product, search, GraphQL | curl |
-| Python | Product, search | Python 3.9+ standard library |
-| Node.js | Product, search, GraphQL | Node.js 20+ |
+| curl | Product, search, sales estimate, GraphQL | curl |
+| Python | Product, search, sales estimate | Python 3.9+ standard library |
+| Node.js | Product, search, sales estimate, GraphQL | Node.js 20+ |
 | Go | Product | Go 1.23+ standard library |
 
 ### curl
@@ -45,6 +46,7 @@ Every REST response uses an envelope. Product data is under
 ```bash
 bash examples/curl/quickstart.sh
 bash examples/curl/search-products.sh
+bash examples/curl/sales-estimate.sh
 bash examples/curl/graphql-product.sh
 ```
 
@@ -53,6 +55,7 @@ bash examples/curl/graphql-product.sh
 ```bash
 python3 examples/python/01_product.py
 python3 examples/python/02_search.py
+python3 examples/python/03_sales_estimate.py
 ```
 
 ### Node.js
@@ -61,6 +64,7 @@ python3 examples/python/02_search.py
 node examples/node/01-product.mjs
 node examples/node/02-search.mjs
 node examples/node/03-graphql.mjs
+node examples/node/04-sales-estimate.mjs
 ```
 
 ### Go
@@ -93,6 +97,17 @@ US UK CA DE FR IT ES AU IN MX BR JP PL
 
 Marketplace-local prices retain their original currency. Glade API does not
 convert currencies.
+
+## Sales-estimate interpretation
+
+The sales example checks `salesEstimate.status` before reading unit values and
+preserves product scope, retrieval time, estimation time, and model version.
+Weekly, monthly, and annual values are current-rank run-rate projections, not
+historical sales windows. Independent calibration, confidence intervals, and
+historical revenue are unavailable when the response declares them so. Group
+siblings only when `familyDeduplicationKey` is present, and never substitute
+zero for an unavailable estimate. Do not sum sibling projections when
+`salesEstimate.scope` is `UNKNOWN`.
 
 ## Interfaces
 

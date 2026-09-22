@@ -23,6 +23,7 @@ function run(command, args, options = {}) {
 const shellExamples = [
   "examples/curl/quickstart.sh",
   "examples/curl/search-products.sh",
+  "examples/curl/sales-estimate.sh",
   "examples/curl/graphql-product.sh",
 ];
 for (const file of shellExamples) run("bash", ["-n", file]);
@@ -31,6 +32,7 @@ const pythonExamples = [
   "examples/python/glade_client.py",
   "examples/python/01_product.py",
   "examples/python/02_search.py",
+  "examples/python/03_sales_estimate.py",
 ];
 run("python3", [
   "-c",
@@ -43,6 +45,7 @@ const nodeExamples = [
   "examples/node/01-product.mjs",
   "examples/node/02-search.mjs",
   "examples/node/03-graphql.mjs",
+  "examples/node/04-sales-estimate.mjs",
   "scripts/verify-live.mjs",
 ];
 for (const file of nodeExamples) run(process.execPath, ["--check", file]);
@@ -55,7 +58,12 @@ run("go", ["test", "./..."], {
   },
 });
 
-const runnableExamples = [...shellExamples, ...pythonExamples, ...nodeExamples.slice(0, 4), "examples/go/main.go"];
+const runnableExamples = [
+  ...shellExamples,
+  ...pythonExamples,
+  ...nodeExamples.filter((file) => !file.startsWith("scripts/")),
+  "examples/go/main.go",
+];
 for (const file of runnableExamples) {
   const source = readFileSync(path.join(root, file), "utf8");
   assert.doesNotMatch(source, /glade_live_[A-Za-z0-9_-]{12,}/, `${file} contains a key-shaped literal`);
@@ -71,5 +79,10 @@ for (const file of credentialReaders) {
   const source = readFileSync(path.join(root, file), "utf8");
   assert.match(source, /GLADE_API_KEY/, `${file} must read GLADE_API_KEY`);
 }
+
+assert.match(
+  readFileSync(path.join(root, "examples/node/04-sales-estimate.mjs"), "utf8"),
+  /sourceObservedAt/,
+);
 
 console.log(`Validated ${runnableExamples.length} runnable examples.`);
